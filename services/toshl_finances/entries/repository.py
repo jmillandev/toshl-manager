@@ -2,7 +2,7 @@ from services.toshl_finances.repository_interface import RepositoryInterface
 from .endpoints import List
 from aiohttp.helpers import BasicAuth
 from aiohttp import ClientSession
-
+from services.toshl_finances.errors import RequestToshlError
 from logging import getLogger
 
 logger = getLogger('toshl')
@@ -27,10 +27,10 @@ class Entry(RepositoryInterface):
             async with method(List.URL, params=params) as response:
                 logger.info(f"Status: {response.status}")
 
-                data = await response.json()
+                resp_data = await response.json()
 
                 if response.status < 300:
                     print(log_msg)
-                    return data
-        # TODO: Create a custom error
-        raise Exception(f"ERROR:: Request: {log_msg} -> Response: {data}")
+                    return resp_data
+
+        raise RequestToshlError(List.METHOD, List.URL, params, resp_data, response.status)
