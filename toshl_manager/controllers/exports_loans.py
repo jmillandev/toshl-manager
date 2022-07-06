@@ -10,10 +10,11 @@ class ExportLoans:
     self._to_date = to_date
   
   async def execute(self):
-    await toshl_app.entries().list(
+    data = await toshl_app.entries().list(
       from_date = self._from_date,
       to_date = self._to_date,
       type = types.EXPENSIVE,
-      category_ids = LOAND_CATEGORY_ID,
-      tag_ids = LOAND_TAG_IDS
+      categories = LOAND_CATEGORY_ID,
+      tags = LOAND_TAG_IDS
     )
+    return data

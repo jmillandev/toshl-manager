@@ -3,9 +3,13 @@ from .endpoints import List
 from aiohttp.helpers import BasicAuth
 from aiohttp import ClientSession
 
+from logging import getLogger
+
+logger = getLogger('toshl')
+
 class Entry(RepositoryInterface):
     PARAM_NAMES = [
-        'type', 'category_ids', 'tag_ids'
+        'type', 'categories', 'tags'
     ]
 
     def __init__(self, secret_key) -> None:
@@ -13,10 +17,20 @@ class Entry(RepositoryInterface):
         super().__init__()
 
     async def list(self, from_date, to_date, **kwargs):
+        params = {
+            key:kwargs.get(key) for key in self.PARAM_NAMES if kwargs.get(key) != None
+        }
+        params.update({'from': from_date, 'to': to_date})
         async with ClientSession(auth=BasicAuth(self._secret_key)) as session:
-            async with getattr(session, List.METHOD.lower())(List.URL) as response:
-                print("Status:", response.status)
-                print("Content-type:", response.headers['content-type'])
+            method = getattr(session, List.METHOD.lower())
+            log_msg = f"-X {List.METHOD} {List.URL} --data {params}"
+            async with method(List.URL, params=params) as response:
+                logger.info(f"Status: {response.status}")
 
-                html = await response.text()
-                print("Body:", html[:15], "...")    
+                data = await response.json()
+
+                if response.status < 300:
+                    print(log_msg)
+                    return data
+        # TODO: Create a custom error
+        raise Exception(f"ERROR:: Request: {log_msg} -> Response: {data}")

@@ -15,4 +15,9 @@ class ExportLoans(Command):
         date_from = self.argument('from')
         date_to = self.argument('to')
 
-        asyncio.run(ExportLoansController(date_from, date_to).execute())
+        data = asyncio.run(ExportLoansController(date_from, date_to).execute())
+
+        table = self.table()
+        table.set_header_row(['Date', 'Amount', 'Description'])
+        table.set_rows([[row['date'], str(row['amount']), row['desc']]for row in data])
+        table.render(self.io)
