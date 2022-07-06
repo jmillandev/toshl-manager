@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "toshl-manager"
+version = "0.1.0"
+description = "A simple app for manage some entries in my toshl finance account"
+authors = ["Jesús Millán <jgmc3012@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
