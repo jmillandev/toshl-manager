@@ -1,8 +1,8 @@
 from cleo import Command
-from .controllers.exports_loans import ExportLoans as ExportLoansController
+from .controllers.loans import Loans as ExportLoansController
 import asyncio
 from services.formaters.table import TableFormat
-class ExportLoans(Command):
+class ShowLoans(Command):
     """
     Show the loans in tha specific format
 

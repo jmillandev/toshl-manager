@@ -4,7 +4,7 @@ from config import TOSH_SECRET_KEY, LOAND_CATEGORY_ID, LOAND_TAG_IDS
 
 toshl_app = ToshlApp(TOSH_SECRET_KEY)
 
-class ExportLoans:
+class Loans:
     def __init__(self, from_date, to_date) -> None:
         self._from_date = from_date
         self._to_date = to_date
