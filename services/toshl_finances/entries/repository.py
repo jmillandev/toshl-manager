@@ -17,6 +17,7 @@ class Entry(RepositoryInterface):
         super().__init__()
 
     async def list(self, from_date, to_date, **kwargs):
+        # TODO: Exclude the entries that not contain all of the tag ids sended in the request
         params = {
             key:kwargs.get(key) for key in self.PARAM_NAMES if kwargs.get(key) != None
         }
