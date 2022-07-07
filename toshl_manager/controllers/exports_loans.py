@@ -17,4 +17,12 @@ class ExportLoans:
       categories = LOAND_CATEGORY_ID,
       tags = LOAND_TAG_IDS
     )
-    return data
+    return tuple(
+      (
+        {
+          'Date': row['date'],
+          'USD Amount': str(abs(row['amount'])),
+          'Description': row['desc']
+        } for row in data
+      )
+    )

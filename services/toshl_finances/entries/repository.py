@@ -25,11 +25,10 @@ class Entry(RepositoryInterface):
             method = getattr(session, List.METHOD.lower())
             log_msg = f"-X {List.METHOD} {List.URL} --data {params}"
             async with method(List.URL, params=params) as response:
-                logger.info(f"Status: {response.status}")
-
                 resp_data = await response.json()
 
                 if response.status < 300:
+                    logger.info(log_msg) # TODO: Config logger
                     print(log_msg)
                     return resp_data
 
