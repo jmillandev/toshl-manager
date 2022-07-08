@@ -2,8 +2,8 @@ import asyncio
 
 from cleo import Command
 
-from services.formaters.table import TableFormat
-from services.formaters.csv import CsvFormat
+from services.formatters.table import TableFormat
+from services.formatters.csv import CsvFormat
 
 from .controllers.loans import Loans as LoansController
 from .controllers.roomie_expenses import RoomieExpenses as RoomieExpensesController
