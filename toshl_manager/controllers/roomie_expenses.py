@@ -15,7 +15,7 @@ class RoomieExpenses:
             from_date=self._from_date,
             to_date=self._to_date,
             type=types.EXPENSIVE,
-            tags=SEPARATOR.join(ROOMIE_UNPAYMENT_TAG_IDS),
+            tags=SEPARATOR.join(ROOMIE_UNPAYMENT_TAG_IDS)
         )
         return self._format(data)
 

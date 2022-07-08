@@ -18,6 +18,7 @@ class Entry(RepositoryInterface):
         super().__init__()
 
     async def list(self, from_date, to_date, **kwargs):
+        includes = kwargs.pop('includes', [])
         params = {
             key:kwargs.get(key) for key in self.PARAM_NAMES if kwargs.get(key) != None
         }
@@ -33,6 +34,9 @@ class Entry(RepositoryInterface):
                     print(log_msg)
                     if params['tags']:
                         resp_data = has_containt_all_tags(params['tags'], resp_data)
+                    if includes:
+                        # TODO: Incluces extra information
+                        resp_data = add_include_data(resp_data)
                     return resp_data
 
         raise RequestToshlError(List.METHOD, List.URL, params, resp_data, response.status)
