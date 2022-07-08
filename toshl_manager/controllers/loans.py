@@ -1,6 +1,6 @@
-from services.toshl_finances.toshl_app import ToshlApp
+from config import LOAND_CATEGORY_ID, LOAND_TAG_IDS, SEPARATOR, TOSH_SECRET_KEY
 from services.toshl_finances.entries import types
-from config import TOSH_SECRET_KEY, LOAND_CATEGORY_ID, LOAND_TAG_IDS
+from services.toshl_finances.toshl_app import ToshlApp
 
 toshl_app = ToshlApp(TOSH_SECRET_KEY)
 
@@ -16,7 +16,7 @@ class Loans:
             to_date=self._to_date,
             type=types.EXPENSIVE,
             categories=LOAND_CATEGORY_ID,
-            tags=LOAND_TAG_IDS,
+            tags=SEPARATOR.join(LOAND_TAG_IDS),
         )
         return self._format(data)
 
@@ -27,14 +27,20 @@ class Loans:
             amount = abs(row["amount"])
             response.append(
                 {
-                    "Date": row["date"],
-                    "USD Amount": str(amount),
                     "Description": row["desc"],
+                    "USD Amount": str(amount),
+                    "Date": row["date"],
+                    "ID": row["id"],
                 }
             )
             sum += amount
 
         response.append(
-            {"Date": "---", "USD Amount": f"{sum:.3f}", "Description": "TOTAL"}
+            {
+                "Description": "TOTAL",
+                "USD Amount": f"{sum:.3f}",
+                "Date": "---",
+                "ID": "---",
+            }
         )
         return response

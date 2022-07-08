@@ -4,6 +4,7 @@ from aiohttp.helpers import BasicAuth
 from aiohttp import ClientSession
 from services.toshl_finances.errors import RequestToshlError
 from logging import getLogger
+from .utils import has_containt_all_tags
 
 logger = getLogger('toshl')
 
@@ -17,7 +18,6 @@ class Entry(RepositoryInterface):
         super().__init__()
 
     async def list(self, from_date, to_date, **kwargs):
-        # TODO: Exclude the entries that not contain all of the tag ids sended in the request
         params = {
             key:kwargs.get(key) for key in self.PARAM_NAMES if kwargs.get(key) != None
         }
@@ -31,6 +31,8 @@ class Entry(RepositoryInterface):
                 if response.status < 300:
                     logger.info(log_msg) # TODO: Config logger
                     print(log_msg)
+                    if params['tags']:
+                        resp_data = has_containt_all_tags(params['tags'], resp_data)
                     return resp_data
 
         raise RequestToshlError(List.METHOD, List.URL, params, resp_data, response.status)
