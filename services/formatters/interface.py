@@ -1,5 +1,5 @@
 # TODO: Implement ABC 
 class RenderInterface:
 
-  def exec(self ,rows: tuple) -> str:
+  def execute(self ,rows: tuple) -> str:
     pass

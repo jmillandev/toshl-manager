@@ -28,7 +28,7 @@ class Loans:
             response.append(
                 {
                     "Description": row["desc"],
-                    "USD Amount": str(amount),
+                    "USD Amount": amount,
                     "Date": row["date"],
                     "ID": row["id"],
                 }
@@ -38,7 +38,7 @@ class Loans:
         response.append(
             {
                 "Description": "TOTAL",
-                "USD Amount": f"{sum:.3f}",
+                "USD Amount": sum,
                 "Date": "---",
                 "ID": "---",
             }

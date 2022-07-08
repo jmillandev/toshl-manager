@@ -1,7 +1,7 @@
 from services.toshl_finances.repository_interface import RepositoryInterface
 from .endpoints import List
 from ..client import make_request
-from .utils import has_containt_all_tags, utc_date, optional_params
+from ..utils import has_containt_all_tags, utc_date, optional_params
 
 class Entry(RepositoryInterface):
 

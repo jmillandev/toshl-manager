@@ -1,4 +1,5 @@
 from .interface import RenderInterface
+from .utils import format_values_to_str
 
 CORNER = '+'
 V_LINE = '|'
@@ -6,9 +7,10 @@ H_LINE = '-'
 
 class TableFormat(RenderInterface):
 
-  def exec(self, data: tuple) -> str:
+  def execute(self, data: tuple) -> str:
     if len(data) == 0:
       return 'Empty Data'
+    data = tuple(map(format_values_to_str, data))
 
     headers = data[0].keys()
     columns_width = self._columns_width(data).values()

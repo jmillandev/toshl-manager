@@ -1,4 +1,5 @@
 from services.toshl_finances.entries.repository import Entry
+from services.toshl_finances.buggets.repository import Bugget
 
 class ToshlApp:
 
@@ -7,3 +8,6 @@ class ToshlApp:
 
   def entries(self):
     return Entry(self._secret_key)
+
+  def buggets(self):
+    return Bugget(self._secret_key)
