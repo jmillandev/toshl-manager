@@ -4,7 +4,7 @@ from aiohttp.helpers import BasicAuth
 from aiohttp import ClientSession
 from services.toshl_finances.errors import RequestToshlError
 from logging import getLogger
-from .utils import has_containt_all_tags
+from .utils import has_containt_all_tags, utc_date
 
 logger = getLogger('toshl')
 
@@ -22,7 +22,7 @@ class Entry(RepositoryInterface):
         params = {
             key:kwargs.get(key) for key in self.PARAM_NAMES if kwargs.get(key) != None
         }
-        params.update({'from': from_date, 'to': to_date})
+        params.update({'from': utc_date(from_date), 'to': utc_date(to_date)})
         async with ClientSession(auth=BasicAuth(self._secret_key)) as session:
             method = getattr(session, List.METHOD.lower())
             log_msg = f"-X {List.METHOD} {List.URL} --data {params}"
