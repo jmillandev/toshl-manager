@@ -1,6 +1,6 @@
 from services.toshl_finances.toshl_app import ToshlApp
 from services.toshl_finances.entries import types
-from config import TOSH_SECRET_KEY, ROOMIE_UNPAYMENT_TAG_IDS
+from config import TOSH_SECRET_KEY, ROOMIE_UNPAYMENT_TAG_IDS, SEPARATOR
 
 toshl_app = ToshlApp(TOSH_SECRET_KEY)
 
@@ -15,7 +15,7 @@ class RoomieExpenses:
             from_date=self._from_date,
             to_date=self._to_date,
             type=types.EXPENSIVE,
-            tags=ROOMIE_UNPAYMENT_TAG_IDS,
+            tags=SEPARATOR.join(ROOMIE_UNPAYMENT_TAG_IDS),
         )
         return self._format(data)
 
@@ -26,15 +26,24 @@ class RoomieExpenses:
             amount = abs(row["amount"])
             response.append(
                 {
-                    "Date": row["date"],
-                    "USD Amount": str(amount),
                     "Description": row["desc"].replace('\n', ' - '),
-                    # TODO: Show Category name and tag names to the user
+                    "USD Amount": str(amount),
+                    "Category": row["category"],
+                    "Tags": SEPARATOR.join(row["tags"]),
+                    "Date": row["date"],
+                    "ID": row["id"],
                 }
             )
             sum += amount
 
         response.append(
-            {"Date": "---", "USD Amount": f"{sum/2:.3f}", "Description": "TOTAL / 2"}
+            {
+                "Description": "TOTAL / 2",
+                "USD Amount": f"{sum/2:.3f}",
+                "Category": "---",
+                "Tags": "---",
+                "Date": "---",
+                "ID": "---",
+            }
         )
         return response
