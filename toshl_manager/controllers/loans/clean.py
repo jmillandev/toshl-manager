@@ -10,6 +10,7 @@ toshl_app = ToshlApp(TOSH_SECRET_KEY)
 
 
 class CleanLoansController:
+    # TODO: Merge Loans and Roomie Expenses Controllers
     def __init__(self, from_date, to_date) -> None:
         self._from_date = from_date
         self._to_date = to_date

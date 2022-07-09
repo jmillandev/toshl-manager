@@ -4,6 +4,7 @@ from cleo import Command
 
 from services.formatters.csv import CsvFormat
 from services.formatters.table import TableFormat
+from services.outputs.terminal import TerminalOutput
 
 from .controllers.buggets import Buggets as BuggetsController
 from .controllers.loans.show import ShowLoansController
@@ -14,6 +15,7 @@ from .controllers.roomie_expenses.clean import CleanRoomieExpensesController
 from .utils import date
 
 FORMATERS = {"table": TableFormat, "csv": CsvFormat}
+OUTPUTS = {"terminal": TerminalOutput}
 
 
 class ShowLoans(Command):
@@ -24,16 +26,17 @@ class ShowLoans(Command):
         {--from= : What time from do you want export data?. By default is begin month}
         {--to= : What time until do you want export data?. By default is end month}
         {--formatter=table : How do you can see data(table or csv)}
+        {--output=terminal : Where do you want get the information?(terminal, file) }
     """
 
     def handle(self):
         date_from = self.option("from") or date.begin_month()
         date_to = self.option("to") or date.end_month()
-        formatter_name = self.option("formatter").lower()
-        formater = FORMATERS[formatter_name]
+        formater = FORMATERS[self.option("formatter").lower()]
+        output = OUTPUTS[self.option("output").lower()]
 
         entries = asyncio.run(ShowLoansController(date_from, date_to).execute())
-        print(formater().execute(entries))
+        output.out(formater().execute(entries), 'Loans')
 
 
 class CleanLoans(Command):
@@ -44,16 +47,17 @@ class CleanLoans(Command):
         {--from= : What time from do you want export data?. By default is begin month}
         {--to= : What time until do you want export data?. By default is end month}
         {--formatter=table : How do you can see data(table or csv)}
+        {--output=terminal : Where do you want get the information?(terminal, file) }
     """
 
     def handle(self):
         date_from = self.option("from") or date.begin_month()
         date_to = self.option("to") or date.end_month()
-        formatter_name = self.option("formatter").lower()
-        formater = FORMATERS[formatter_name]
+        formater = FORMATERS[self.option("formatter").lower()]
+        output = OUTPUTS[self.option("output").lower()]
 
         entries = asyncio.run(CleanLoansController(date_from, date_to).execute())
-        print(formater().execute(entries))
+        output.out(formater().execute(entries), 'Loans')
 
 
 class ShowRoomieExpenses(Command):
@@ -64,16 +68,19 @@ class ShowRoomieExpenses(Command):
         {--from= : What time from do you want export data?. By default is begin month}
         {--to= : What time until do you want export data?. By default is end month}
         {--formatter=table : How do you can see data(table or csv)}
+        {--output=terminal : Where do you want get the information?(terminal, file) }
     """
 
     def handle(self):
         date_from = self.option("from") or date.begin_month()
         date_to = self.option("to") or date.end_month()
-        formatter_name = self.option("formatter").lower()
-        formater = FORMATERS[formatter_name]
+        formater = FORMATERS[self.option("formatter").lower()]
+        output = OUTPUTS[self.option("output").lower()]
 
-        entries = asyncio.run(ShowRoomieExpensesController(date_from, date_to).execute())
-        print(formater().execute(entries))
+        entries = asyncio.run(
+            ShowRoomieExpensesController(date_from, date_to).execute()
+        )
+        output.out(formater().execute(entries), 'Rooming expenses')
 
 
 class CleanRoomieExpenses(Command):
@@ -84,16 +91,19 @@ class CleanRoomieExpenses(Command):
         {--from= : What time from do you want export data?. By default is begin month}
         {--to= : What time until do you want export data?. By default is end month}
         {--formatter=table : How do you can see data(table or csv)}
+        {--output=terminal : Where do you want get the information?(terminal, file) }
     """
 
     def handle(self):
         date_from = self.option("from") or date.begin_month()
         date_to = self.option("to") or date.end_month()
-        formatter_name = self.option("formatter").lower()
-        formater = FORMATERS[formatter_name]
+        formater = FORMATERS[self.option("formatter").lower()]
+        output = OUTPUTS[self.option("output").lower()]
 
-        entries = asyncio.run(CleanRoomieExpensesController(date_from, date_to).execute())
-        print(formater().execute(entries))
+        entries = asyncio.run(
+            CleanRoomieExpensesController(date_from, date_to).execute()
+        )
+        output.out(formater().execute(entries), 'Rooming expenses')
 
 
 class ShowBugets(Command):
@@ -104,13 +114,14 @@ class ShowBugets(Command):
         {--from= : What time from do you want export data?. By default is begin month}
         {--to= : What time until do you want export data?. By default is end month}
         {--formatter=table : How do you can see data(table or csv)}
+        {--output=terminal : Where do you want get the information?(terminal, file) }
     """
 
     def handle(self):
         date_from = self.option("from") or date.begin_month()
         date_to = self.option("to") or date.end_month()
-        formatter_name = self.option("formatter").lower()
-        formater = FORMATERS[formatter_name]
+        formater = FORMATERS[self.option("formatter").lower()]
+        output = OUTPUTS[self.option("output").lower()]
 
         entries = asyncio.run(BuggetsController(date_from, date_to).execute())
-        print(formater().execute(entries))
+        output.out(formater().execute(entries), 'Buggets')
