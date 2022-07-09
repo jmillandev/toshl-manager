@@ -1,8 +1,9 @@
-from config import TOSH_SECRET_KEY
+from config import TOSH_SECRET_KEY, BUGGETS_SHARED
 from services.toshl_finances.toshl_app import ToshlApp
 from collections import defaultdict
 
 toshl_app = ToshlApp(TOSH_SECRET_KEY)
+BUGGETS_SHARED = set(BUGGETS_SHARED)
 
 def zero():
   return 0
@@ -23,6 +24,8 @@ class Buggets:
         response = []
         sum = defaultdict(zero)
         for row in data:
+            if self._is_a_rooming_bugget(row["id"]):
+                self._split_amount(row)
             used = row["amount"] - row["planned"]
             overspending = 0
             free = row["limit"] - row["amount"]
@@ -41,6 +44,7 @@ class Buggets:
                     "Free (USD)": free,
                     "Overspending (USD)": overspending,
                     "Needed (USD)": needed,
+                    "Shared with rommie": str(self._is_a_rooming_bugget(row["id"])),
                     "ID": row["id"],
                 }
             )
@@ -60,7 +64,17 @@ class Buggets:
                     "Free (USD)": sum["free"],
                     "Overspending (USD)": sum["overspending"],
                     "Needed (USD)": sum["needed"],
+                    "Shared with rommie": "---",
                     "ID": "---"
                 }
         )
         return response
+
+    def _is_a_rooming_bugget(self, bugget_id):
+        return (bugget_id.split('-')[0] in BUGGETS_SHARED)
+
+    def _split_amount(self, row):
+        for key in ["amount", "limit", "planned"]:
+            if not bool(row[key]):
+                continue
+            row[key] = row[key] / 2
