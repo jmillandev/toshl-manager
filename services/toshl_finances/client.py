@@ -1,3 +1,4 @@
+from re import U
 from aiohttp.helpers import BasicAuth
 from aiohttp import ClientSession
 from logging import getLogger
@@ -7,6 +8,7 @@ logger = getLogger('toshl')
 
 
 async def make_request(http_method: str, url: str, secret_key: str, **kwargs):
+    url = format_url(url, kwargs.get('params', {}))        
     async with ClientSession(auth=BasicAuth(secret_key)) as session:
         method = getattr(session, http_method.lower())
         http_method = http_method.upper()
@@ -20,3 +22,6 @@ async def make_request(http_method: str, url: str, secret_key: str, **kwargs):
                 return resp_data
 
         raise RequestToshlError(http_method, url, kwargs, resp_data, response.status)
+
+def format_url(url, params):
+    return url.format(**params)

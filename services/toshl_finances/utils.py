@@ -19,4 +19,4 @@ def utc_date(string_date):
     return utc_dt.strftime('%Y-%m-%dT%H:%M:%SZ')
 
 def optional_params(Endpoint, kwargs):
-    return { key:kwargs.get(key) for key in Endpoint.OPTIONAL_PARAMS if kwargs.get(key) != None }
+    return { key: kwargs.get(key) for key in Endpoint.OPTIONAL_PARAMS if kwargs.get(key) != None }

@@ -1,5 +1,5 @@
 from services.toshl_finances.repository_interface import RepositoryInterface
-from .endpoints import List
+from .endpoints import List, Update
 from ..client import make_request
 from ..utils import has_containt_all_tags, utc_date, optional_params
 
@@ -22,3 +22,20 @@ class Entry(RepositoryInterface):
             # response = add_include_data(response)
             pass
         return response
+    
+    async def update(self, id, amount, currency, date, desc, account, category, tags, modified, extra = None, **_trash):
+        data = {
+            "amount": amount,
+            "currency": currency,
+            "date": date,
+            "desc": desc,
+            "account": account,
+            "category": category,
+            "tags": tags,
+            "modified": modified,
+            "extra": extra
+        }
+        params = {
+            "id": id
+        }
+        return await make_request(Update.METHOD, Update.URL, self._secret_key, json=data, params=params)

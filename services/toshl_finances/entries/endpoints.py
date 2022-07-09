@@ -5,3 +5,8 @@ class List:
     METHOD = "GET"
     URL = BASE_URL + "/entries"
     OPTIONAL_PARAMS = ["type", "categories", "tags"]
+
+class Update:
+    METHOD = "PUT"
+    URL = BASE_URL + "/entries/{id}"
+    OPTIONAL_PARAMS = ["extra"]

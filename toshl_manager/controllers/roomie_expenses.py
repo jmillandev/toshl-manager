@@ -1,6 +1,6 @@
 from services.toshl_finances.toshl_app import ToshlApp
 from services.toshl_finances.entries import types
-from config import TOSH_SECRET_KEY, ROOMIE_UNPAYMENT_TAG_IDS, SEPARATOR
+from config import TOSH_SECRET_KEY, SEPARATOR, ROOMIE_TAG_ID, UNPAYMENT_TAG_ID
 
 toshl_app = ToshlApp(TOSH_SECRET_KEY)
 
@@ -15,7 +15,7 @@ class RoomieExpenses:
             from_date=self._from_date,
             to_date=self._to_date,
             type=types.EXPENSIVE,
-            tags=SEPARATOR.join(ROOMIE_UNPAYMENT_TAG_IDS)
+            tags=SEPARATOR.join((ROOMIE_TAG_ID, UNPAYMENT_TAG_ID))
         )
         return self._format(data)
 
