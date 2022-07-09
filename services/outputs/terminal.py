@@ -1,6 +1,5 @@
 class TerminalOutput:
 
-  @staticmethod
-  def out(body, title):
+  def out(self, body, title):
     print(title)
     print(body)

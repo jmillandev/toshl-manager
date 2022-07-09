@@ -5,6 +5,7 @@ from cleo import Command
 from services.formatters.csv import CsvFormat
 from services.formatters.table import TableFormat
 from services.outputs.terminal import TerminalOutput
+from services.outputs.file import FileOutput
 
 from .controllers.buggets import Buggets as BuggetsController
 from .controllers.loans.show import ShowLoansController
@@ -15,7 +16,7 @@ from .controllers.roomie_expenses.clean import CleanRoomieExpensesController
 from .utils import date
 
 FORMATERS = {"table": TableFormat, "csv": CsvFormat}
-OUTPUTS = {"terminal": TerminalOutput}
+OUTPUTS = {"terminal": TerminalOutput(), "file": FileOutput('txt')}
 
 
 class ShowLoans(Command):

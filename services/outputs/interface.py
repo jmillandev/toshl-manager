@@ -1,5 +1,4 @@
 class OutputInterface:
 
-  @staticmethod
-  def out(body, title):
+  def out(self, body, title):
     raise NotImplementedError
