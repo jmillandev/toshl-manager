@@ -8,7 +8,7 @@ class LoansFormatter:
             amount = abs(row["amount"])
             response.append(
                 {
-                    "Description": row["desc"],
+                    "Description": row["desc"].replace('\n', ' - '),
                     "USD Amount": amount,
                     "Date": row["date"],
                     "ID": row["id"],

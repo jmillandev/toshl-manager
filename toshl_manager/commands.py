@@ -8,7 +8,9 @@ from services.formatters.table import TableFormat
 from .controllers.buggets import Buggets as BuggetsController
 from .controllers.loans.show import ShowLoansController
 from .controllers.loans.clean import CleanLoansController
-from .controllers.roomie_expenses import RoomieExpenses as RoomieExpensesController
+from .controllers.roomie_expenses.show import ShowRoomieExpensesController
+from .controllers.roomie_expenses.clean import CleanRoomieExpensesController
+
 from .utils import date
 
 FORMATERS = {"table": TableFormat, "csv": CsvFormat}
@@ -70,7 +72,27 @@ class ShowRoomieExpenses(Command):
         formatter_name = self.option("formatter").lower()
         formater = FORMATERS[formatter_name]
 
-        entries = asyncio.run(RoomieExpensesController(date_from, date_to).execute())
+        entries = asyncio.run(ShowRoomieExpensesController(date_from, date_to).execute())
+        print(formater().execute(entries))
+
+
+class CleanRoomieExpenses(Command):
+    """
+    Remove unpayment tag from the roomie expense entries. And show the entries modificated
+
+    roomie:expenses:clean
+        {--from= : What time from do you want export data?. By default is begin month}
+        {--to= : What time until do you want export data?. By default is end month}
+        {--formatter=table : How do you can see data(table or csv)}
+    """
+
+    def handle(self):
+        date_from = self.option("from") or date.begin_month()
+        date_to = self.option("to") or date.end_month()
+        formatter_name = self.option("formatter").lower()
+        formater = FORMATERS[formatter_name]
+
+        entries = asyncio.run(CleanRoomieExpensesController(date_from, date_to).execute())
         print(formater().execute(entries))
 
 
