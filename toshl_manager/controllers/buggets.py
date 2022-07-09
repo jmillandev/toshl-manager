@@ -49,7 +49,7 @@ class Buggets:
             sum['free'] += free
             sum['limit'] += row["limit"]
             sum["planned"] += row["planned"]
-            sum["amount"] += row["amount"]
+            sum["needed"] += needed
 
         response.append(
             {
@@ -59,7 +59,7 @@ class Buggets:
                     "Used (USD)": sum["used"],
                     "Free (USD)": sum["free"],
                     "Overspending (USD)": sum["overspending"],
-                    "Needed (USD)": sum["amount"],
+                    "Needed (USD)": sum["needed"],
                     "ID": "---"
                 }
         )
