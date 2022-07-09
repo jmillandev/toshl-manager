@@ -5,7 +5,7 @@ from services.toshl_finances.toshl_app import ToshlApp
 toshl_app = ToshlApp(TOSH_SECRET_KEY)
 
 
-class Loans:
+class ShowLoansController:
     def __init__(self, from_date, to_date) -> None:
         self._from_date = from_date
         self._to_date = to_date
