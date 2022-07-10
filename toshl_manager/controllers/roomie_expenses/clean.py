@@ -13,6 +13,7 @@ class CleanRoomieExpensesController:
     def __init__(self, from_date, to_date) -> None:
         self._from_date = from_date
         self._to_date = to_date
+        self.__sem = None
 
     @property
     def _sem(self):
