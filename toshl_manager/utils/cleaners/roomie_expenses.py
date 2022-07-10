@@ -1,6 +1,3 @@
-from config import SEPARATOR
-
-
 class RoomieExpensesCleaner:
 
     @staticmethod
@@ -9,12 +6,14 @@ class RoomieExpensesCleaner:
         sum = 0
         for row in data:
             amount = abs(row["amount"])
+            categories = row["included"]["category"]
+            tags = row["included"]["tags"]
             response.append(
                 {
                     "Description": row["desc"].replace('\n', ' - '),
                     "USD Amount": str(amount),
-                    "Category": row["category"],
-                    "Tags": SEPARATOR.join(row["tags"]),
+                    "Category": categories[row["category"]]["name"],
+                    "Tags": " - ".join(map(lambda tg: tags[tg]["name"], row["tags"])),
                     "Date": row["date"],
                     "ID": row["id"],
                 }

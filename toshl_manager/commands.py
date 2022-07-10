@@ -98,6 +98,7 @@ class ShowRoomieExpenses(Command):
             date_from,
             date_to,
             tags=SEPARATOR.join((ROOMIE_TAG_ID, UNPAYMENT_TAG_ID)),
+            includes=['category', 'tags']
         ).execute()
         entries = asyncio.run(coroutine)
         output.out(formater().execute(entries), "Rooming expenses")
