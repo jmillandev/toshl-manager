@@ -2,21 +2,22 @@ import asyncio
 
 from cleo import Command
 
+from config import (DEBTOR_TAG_ID, LOAND_CATEGORY_ID, ROOMIE_TAG_ID, SEPARATOR,
+                    UNPAYMENT_TAG_ID)
 from services.formatters.csv import CsvFormat
 from services.formatters.table import TableFormat
-from services.outputs.terminal import TerminalOutput
 from services.outputs.file import FileOutput
+from services.outputs.terminal import TerminalOutput
 
 from .controllers.buggets import Buggets as BuggetsController
-from .controllers.loans.show import ShowLoansController
-from .controllers.loans.clean import CleanLoansController
-from .controllers.roomie_expenses.show import ShowRoomieExpensesController
-from .controllers.roomie_expenses.clean import CleanRoomieExpensesController
-
+from .controllers.entries.clean import CleanUnpaymentEntriesController
+from .controllers.entries.show import ShowEntriesController
 from .utils import date
+from .utils.cleaners.loans import LoansCleaner
+from .utils.cleaners.roomie_expenses import RoomieExpensesCleaner
 
 FORMATERS = {"table": TableFormat, "csv": CsvFormat}
-OUTPUTS = {"terminal": TerminalOutput(), "file": FileOutput('txt')}
+OUTPUTS = {"terminal": TerminalOutput(), "file": FileOutput("txt")}
 
 
 class ShowLoans(Command):
@@ -36,8 +37,15 @@ class ShowLoans(Command):
         formater = FORMATERS[self.option("formatter").lower()]
         output = OUTPUTS[self.option("output").lower()]
 
-        entries = asyncio.run(ShowLoansController(date_from, date_to).execute())
-        output.out(formater().execute(entries), 'Loans')
+        coroutine = ShowEntriesController(
+            LoansCleaner,
+            date_from,
+            date_to,
+            categories=LOAND_CATEGORY_ID,
+            tags=SEPARATOR.join((UNPAYMENT_TAG_ID, DEBTOR_TAG_ID)),
+        ).execute()
+        entries = asyncio.run(coroutine)
+        output.out(formater().execute(entries), "Loans")
 
 
 class CleanLoans(Command):
@@ -57,8 +65,15 @@ class CleanLoans(Command):
         formater = FORMATERS[self.option("formatter").lower()]
         output = OUTPUTS[self.option("output").lower()]
 
-        entries = asyncio.run(CleanLoansController(date_from, date_to).execute())
-        output.out(formater().execute(entries), 'Loans')
+        coroutine = CleanUnpaymentEntriesController(
+            LoansCleaner,
+            date_from,
+            date_to,
+            categories=LOAND_CATEGORY_ID,
+            tags=SEPARATOR.join((UNPAYMENT_TAG_ID, DEBTOR_TAG_ID)),
+        ).execute()
+        entries = asyncio.run(coroutine)
+        output.out(formater().execute(entries), "Loans")
 
 
 class ShowRoomieExpenses(Command):
@@ -78,10 +93,14 @@ class ShowRoomieExpenses(Command):
         formater = FORMATERS[self.option("formatter").lower()]
         output = OUTPUTS[self.option("output").lower()]
 
-        entries = asyncio.run(
-            ShowRoomieExpensesController(date_from, date_to).execute()
-        )
-        output.out(formater().execute(entries), 'Rooming expenses')
+        coroutine = ShowEntriesController(
+            RoomieExpensesCleaner,
+            date_from,
+            date_to,
+            tags=SEPARATOR.join((ROOMIE_TAG_ID, UNPAYMENT_TAG_ID)),
+        ).execute()
+        entries = asyncio.run(coroutine)
+        output.out(formater().execute(entries), "Rooming expenses")
 
 
 class CleanRoomieExpenses(Command):
@@ -101,10 +120,14 @@ class CleanRoomieExpenses(Command):
         formater = FORMATERS[self.option("formatter").lower()]
         output = OUTPUTS[self.option("output").lower()]
 
-        entries = asyncio.run(
-            CleanRoomieExpensesController(date_from, date_to).execute()
-        )
-        output.out(formater().execute(entries), 'Rooming expenses')
+        coroutine = CleanUnpaymentEntriesController(
+            RoomieExpensesCleaner,
+            date_from,
+            date_to,
+            tags=SEPARATOR.join((ROOMIE_TAG_ID, UNPAYMENT_TAG_ID)),
+        ).execute()
+        entries = asyncio.run(coroutine)
+        output.out(formater().execute(entries), "Rooming expenses")
 
 
 class ShowBugets(Command):
@@ -125,4 +148,4 @@ class ShowBugets(Command):
         output = OUTPUTS[self.option("output").lower()]
 
         entries = asyncio.run(BuggetsController(date_from, date_to).execute())
-        output.out(formater().execute(entries), 'Buggets')
+        output.out(formater().execute(entries), "Buggets")

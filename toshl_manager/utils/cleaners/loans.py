@@ -1,10 +1,7 @@
-from config import SEPARATOR
-
-
-class RoomieExpensesFormatter:
+class LoansCleaner:
 
     @staticmethod
-    def format(data):
+    def clean(data):
         response = []
         sum = 0
         for row in data:
@@ -12,9 +9,7 @@ class RoomieExpensesFormatter:
             response.append(
                 {
                     "Description": row["desc"].replace('\n', ' - '),
-                    "USD Amount": str(amount),
-                    "Category": row["category"],
-                    "Tags": SEPARATOR.join(row["tags"]),
+                    "USD Amount": amount,
                     "Date": row["date"],
                     "ID": row["id"],
                 }
@@ -23,10 +18,8 @@ class RoomieExpensesFormatter:
 
         response.append(
             {
-                "Description": "TOTAL / 2",
-                "USD Amount": f"{sum/2:.3f}",
-                "Category": "---",
-                "Tags": "---",
+                "Description": "TOTAL",
+                "USD Amount": sum,
                 "Date": "---",
                 "ID": "---",
             }
