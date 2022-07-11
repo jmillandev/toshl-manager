@@ -1,19 +1,17 @@
 class RoomieExpensesCleaner:
 
-    @staticmethod
-    def clean(data):
+    @classmethod
+    def clean(cls, data):
         response = []
         sum = 0
         for row in data:
             amount = abs(row["amount"])
-            categories = row["included"]["category"]
-            tags = row["included"]["tags"]
             response.append(
                 {
                     "Description": row["desc"].replace('\n', ' - '),
                     "USD Amount": str(amount),
-                    "Category": categories[row["category"]]["name"],
-                    "Tags": " - ".join(map(lambda tg: tags[tg]["name"], row["tags"])),
+                    "Category":  cls._format_category(row),
+                    "Tags": cls._format_tags(row),
                     "Date": row["date"],
                     "ID": row["id"],
                 }
@@ -31,3 +29,19 @@ class RoomieExpensesCleaner:
             }
         )
         return response
+
+    @classmethod
+    def _format_category(cls, row):
+        categories = row["included"].get("category")
+        if not categories:
+            return row["category"]
+        
+        return categories[row["category"]]["name"]
+
+    @classmethod
+    def _format_tags(cls, row):
+        tags = row["tags"].get("tags")
+        if not tags:
+            return " - ".join(row["tags"])
+
+        return " - ".join(map(lambda tg: tags[tg]["name"], row["tags"]))
