@@ -40,7 +40,7 @@ class RoomieExpensesCleaner:
 
     @classmethod
     def _format_tags(cls, row):
-        tags = row["tags"].get("tags")
+        tags = row["included"].get("tags")
         if not tags:
             return " - ".join(row["tags"])
 
