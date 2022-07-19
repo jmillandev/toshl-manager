@@ -6,6 +6,7 @@ from toshl_manager.commands import (
     ShowBugets,
     ShowLoans,
     ShowRoomieExpenses,
+    TelegramBot
 )
 
 application = Application()
@@ -15,6 +16,7 @@ application.add(CleanLoans())
 application.add(ShowRoomieExpenses())
 application.add(CleanRoomieExpenses())
 application.add(ShowBugets())
+application.add(TelegramBot())
 
 if __name__ == "__main__":
     application.run()

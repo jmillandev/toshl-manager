@@ -1,9 +1,11 @@
 import asyncio
 
+from aiogram import Bot, Dispatcher
 from cleo import Command
 
-from config import (DEBTOR_TAG_ID, LOAND_CATEGORY_ID, ROOMIE_TAG_ID, SEPARATOR,
-                    UNPAYMENT_TAG_ID)
+from config import (BOT_TOKEN, DEBTOR_TAG_ID, LOAND_CATEGORY_ID, ROOMIE_TAG_ID,
+                    SEPARATOR, UNPAYMENT_TAG_ID)
+from services.bots.commands.helping import start_handler
 from services.formatters.csv import CsvFormat
 from services.formatters.table import TableFormat
 from services.outputs.file import FileOutput
@@ -17,7 +19,7 @@ from .utils.cleaners.loans import LoansCleaner
 from .utils.cleaners.roomie_expenses import RoomieExpensesCleaner
 
 FORMATERS = {"table": TableFormat, "csv": CsvFormat}
-OUTPUTS = {"terminal": TerminalOutput(), "file": FileOutput("txt")}
+OUTPUTS = {"terminal": TerminalOutput(), "file": FileOutput("csv")}
 
 
 class ShowLoans(Command):
@@ -98,7 +100,7 @@ class ShowRoomieExpenses(Command):
             date_from,
             date_to,
             tags=SEPARATOR.join((ROOMIE_TAG_ID, UNPAYMENT_TAG_ID)),
-            includes=['category', 'tags']
+            includes=["category", "tags"],
         ).execute()
         entries = asyncio.run(coroutine)
         output.out(formater().execute(entries), "Rooming expenses")
@@ -150,3 +152,24 @@ class ShowBugets(Command):
 
         entries = asyncio.run(BuggetsController(date_from, date_to).execute())
         output.out(formater().execute(entries), "Buggets")
+
+
+class TelegramBot(Command):
+    """
+    Start the telegram bot
+
+    bot:telegram:start
+    """
+
+    async def main(self):
+        bot = Bot(token=BOT_TOKEN)
+        try:
+            disp = Dispatcher(bot=bot)
+            disp.register_message_handler(start_handler, commands={"start", "restart"})
+            print("Telegram Bot🤖 is running!🏃🏾🔥")
+            await disp.start_polling()
+        finally:
+            await bot.close()
+
+    def handle(self):
+        asyncio.run(self.main())
