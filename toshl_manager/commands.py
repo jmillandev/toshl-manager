@@ -5,7 +5,7 @@ from cleo import Command
 
 from config import (BOT_TOKEN, DEBTOR_TAG_ID, LOAND_CATEGORY_ID, ROOMIE_TAG_ID,
                     SEPARATOR, UNPAYMENT_TAG_ID)
-from services.bots.commands.helping import start_handler
+from services.bots.commands.helping import start_handler, entries
 from services.formatters.csv import CsvFormat
 from services.formatters.table import TableFormat
 from services.outputs.file import FileOutput
@@ -166,6 +166,7 @@ class TelegramBot(Command):
         try:
             disp = Dispatcher(bot=bot)
             disp.register_message_handler(start_handler, commands={"start", "restart"})
+            disp.register_message_handler(entries, commands={"entries"})
             print("Telegram Bot🤖 is running!🏃🏾🔥")
             await disp.start_polling()
         finally:
