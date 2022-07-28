@@ -22,8 +22,8 @@ FORMATERS = {"table": TableFormat, "csv": CsvFormat}
 OUTPUTS = {"terminal": TerminalOutput(), "file": FileOutput("csv")}
 
 ENTRIES_COMMANDS = {
-    "show": ShowEntriesController
-    # 'clean': clean.CleanUnpaymentEntriesController
+    "show": ShowEntriesController,
+    'clean': CleanUnpaymentEntriesController
 }
 ROOMIE_EXPENSES_TAGS = SEPARATOR.join((ROOMIE_TAG_ID, UNPAYMENT_TAG_ID))
 ROOMIE_EXPENSES_INCLUDES = ["category", "tags"]

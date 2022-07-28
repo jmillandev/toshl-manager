@@ -4,7 +4,7 @@ import io
 
 class TextToImageConverter:
 
-    FONT = ImageFont.truetype(font="assets/monospace.ttf", size=17)
+    FONT = ImageFont.truetype(font="assets/monospace.ttf", size=20)
     COLOR_TEXT = "black"
     COLOR_BACKGROUND = "white"
     MARGIN = 2
