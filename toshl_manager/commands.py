@@ -2,10 +2,10 @@ import asyncio
 
 from aiogram import Bot, Dispatcher
 from cleo import Command
-
 from config import (BOT_TOKEN, DEBTOR_TAG_ID, LOAND_CATEGORY_ID, ROOMIE_TAG_ID,
                     SEPARATOR, UNPAYMENT_TAG_ID)
-from services.bots.commands.helping import start_handler, entries
+from services.bots.commands.entries import EntriesCommand
+from services.bots.commands.helping import start_handler
 from services.formatters.csv import CsvFormat
 from services.formatters.table import TableFormat
 from services.outputs.file import FileOutput
@@ -21,6 +21,14 @@ from .utils.cleaners.roomie_expenses import RoomieExpensesCleaner
 FORMATERS = {"table": TableFormat, "csv": CsvFormat}
 OUTPUTS = {"terminal": TerminalOutput(), "file": FileOutput("csv")}
 
+ENTRIES_COMMANDS = {
+    "show": ShowEntriesController
+    # 'clean': clean.CleanUnpaymentEntriesController
+}
+ROOMIE_EXPENSES_TAGS = SEPARATOR.join((ROOMIE_TAG_ID, UNPAYMENT_TAG_ID))
+ROOMIE_EXPENSES_INCLUDES = ["category", "tags"]
+
+LOANS_TAGS = SEPARATOR.join((UNPAYMENT_TAG_ID, DEBTOR_TAG_ID))
 
 class ShowLoans(Command):
     """
@@ -44,7 +52,7 @@ class ShowLoans(Command):
             date_from,
             date_to,
             categories=LOAND_CATEGORY_ID,
-            tags=SEPARATOR.join((UNPAYMENT_TAG_ID, DEBTOR_TAG_ID)),
+            tags=LOANS_TAGS,
         ).execute()
         entries = asyncio.run(coroutine)
         output.out(formater().execute(entries), "Loans")
@@ -72,7 +80,7 @@ class CleanLoans(Command):
             date_from,
             date_to,
             categories=LOAND_CATEGORY_ID,
-            tags=SEPARATOR.join((UNPAYMENT_TAG_ID, DEBTOR_TAG_ID)),
+            tags=LOANS_TAGS,
         ).execute()
         entries = asyncio.run(coroutine)
         output.out(formater().execute(entries), "Loans")
@@ -99,8 +107,8 @@ class ShowRoomieExpenses(Command):
             RoomieExpensesCleaner,
             date_from,
             date_to,
-            tags=SEPARATOR.join((ROOMIE_TAG_ID, UNPAYMENT_TAG_ID)),
-            includes=["category", "tags"],
+            tags=ROOMIE_EXPENSES_TAGS,
+            includes=ROOMIE_EXPENSES_INCLUDES,
         ).execute()
         entries = asyncio.run(coroutine)
         output.out(formater().execute(entries), "Rooming expenses")
@@ -127,7 +135,8 @@ class CleanRoomieExpenses(Command):
             RoomieExpensesCleaner,
             date_from,
             date_to,
-            tags=SEPARATOR.join((ROOMIE_TAG_ID, UNPAYMENT_TAG_ID)),
+            tags=ROOMIE_EXPENSES_TAGS,
+            includes=ROOMIE_EXPENSES_INCLUDES,
         ).execute()
         entries = asyncio.run(coroutine)
         output.out(formater().execute(entries), "Rooming expenses")
@@ -166,7 +175,24 @@ class TelegramBot(Command):
         try:
             disp = Dispatcher(bot=bot)
             disp.register_message_handler(start_handler, commands={"start", "restart"})
-            disp.register_message_handler(entries, commands={"entries"})
+            disp.register_message_handler(
+                EntriesCommand(
+                    ENTRIES_COMMANDS,
+                    cleaner=RoomieExpensesCleaner,
+                    tags=ROOMIE_EXPENSES_TAGS,
+                    includes=ROOMIE_EXPENSES_INCLUDES
+                ).handler,
+                commands={"entries"},
+            )
+            disp.register_message_handler(
+                EntriesCommand(
+                    ENTRIES_COMMANDS,
+                    cleaner=LoansCleaner,
+                    tags=LOANS_TAGS,
+                    categories=LOAND_CATEGORY_ID
+                ).handler,
+                commands={"loans"},
+            )
             print("Telegram Bot🤖 is running!🏃🏾🔥")
             await disp.start_polling()
         finally:
