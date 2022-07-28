@@ -1,9 +1,11 @@
+from cgitb import handler
 from aiogram import types
 from config import BOT_OWNER
 
 
 def auth_middleware(handler):
-    async def wrapper(event: types.Message):
+    async def wrapper(*args):
+        event = args[-1]
         user = event.from_user
         if user.username != BOT_OWNER:
             return await event.answer(
@@ -13,6 +15,6 @@ def auth_middleware(handler):
                 ),
                 parse_mode=types.ParseMode.MARKDOWN_V2,
             )
-        await handler(event)
+        await handler(*args)
 
     return wrapper

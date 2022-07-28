@@ -4,7 +4,7 @@ from re import search
 from toshl_manager.utils import date
 from toshl_manager.utils.cleaners.roomie_expenses import RoomieExpensesCleaner
 from services.formatters.table import TableFormat
-from bots.utils import ScaperSpecialChars
+from services.bots.utils import ScaperSpecialChars
 
 class EntriesCommand:
 
@@ -20,7 +20,7 @@ class EntriesCommand:
         kwargs = self._resolve_kwargs(event.text)
         print(f"TELEGRAM - {kwargs}")  # TODO: Set logger
         if not kwargs.get("command"):
-            return await self._bad_request()
+            return await self._bad_request(event)
 
         entries = await self._get_entries(**kwargs)
         return await event.answer(
@@ -31,7 +31,7 @@ class EntriesCommand:
 
     def _bad_request(self, event: types.Message):
         return event.answer(
-            f"Sorry😥.\n\nThe message should be like as '{self._available_commands()} [from dd/mm/aa] [to dd/mm/aa]'.\n\n"
+            f"Sorry😥\.\n\nThe message should be like as '{self._available_commands()} [from dd/mm/aa] [to dd/mm/aa]'\.\n\n"
             f"*By Default 'from' is {date.begin_month()} and 'to' is {date.end_month()}*",
             parse_mode=types.ParseMode.MARKDOWN_V2,
         )
