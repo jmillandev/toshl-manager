@@ -1,4 +1,5 @@
 from PIL import Image, ImageDraw, ImageFont
+import io
 
 
 class TextToImageConverter:
@@ -18,11 +19,16 @@ class TextToImageConverter:
         )
         d = ImageDraw.Draw(img)
         d.text((cls.MARGIN, cls.MARGIN), text, fill=cls.COLOR_TEXT, font=cls.FONT)
-
-        img.save("image.png")
+        return cls._transform_to_in_memory(img)
 
     @classmethod
     def _getSize(cls, txt, font):
         testImg = Image.new("RGB", (1, 1))
         testDraw = ImageDraw.Draw(testImg)
         return testDraw.textsize(txt, font)
+
+    @classmethod
+    def _transform_to_in_memory(cls, img):
+        s = io.BytesIO()
+        img.save(s, "png")
+        return s.getvalue()

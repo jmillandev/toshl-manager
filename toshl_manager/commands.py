@@ -182,7 +182,7 @@ class TelegramBot(Command):
                     tags=ROOMIE_EXPENSES_TAGS,
                     includes=ROOMIE_EXPENSES_INCLUDES
                 ).handler,
-                commands={"entries"},
+                commands={"expenses"},
             )
             disp.register_message_handler(
                 EntriesCommand(

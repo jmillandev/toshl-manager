@@ -24,12 +24,8 @@ class EntriesCommand:
 
         entries = await self._get_entries(**kwargs)
         message = TableFormat().execute(entries)
-        TextToImageConverter.execute(message)
-        return await event.answer(
-            # TODO: Show this message like as image
-            f"```{ScaperSpecialChars.clean(message)}```",
-            parse_mode=types.ParseMode.MARKDOWN_V2,
-        )
+        
+        return await event.answer_photo(TextToImageConverter.execute(message))
 
     def _bad_request(self, event: types.Message):
         return event.answer(
