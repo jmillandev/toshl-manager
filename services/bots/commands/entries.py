@@ -5,7 +5,7 @@ from toshl_manager.utils import date
 from toshl_manager.utils.cleaners.roomie_expenses import RoomieExpensesCleaner
 from services.formatters.table import TableFormat
 from services.bots.utils import ScaperSpecialChars
-
+from services.text_to_image import TextToImageConverter
 class EntriesCommand:
 
     REGEX_PATTERN = r"(?P<command>(show)|(clean))(\s+from\s+(?P<from>\d{1,2}\/\d{1,2}\/\d{1,2}))?(\s+to\s+(?P<to>\d{1,2}\/\d{1,2}\/\d{1,2}))?"
@@ -23,9 +23,11 @@ class EntriesCommand:
             return await self._bad_request(event)
 
         entries = await self._get_entries(**kwargs)
+        message = TableFormat().execute(entries)
+        TextToImageConverter.execute(message)
         return await event.answer(
             # TODO: Show this message like as image
-            f"```{ScaperSpecialChars.clean(TableFormat().execute(entries))}```",
+            f"```{ScaperSpecialChars.clean(message)}```",
             parse_mode=types.ParseMode.MARKDOWN_V2,
         )
 
