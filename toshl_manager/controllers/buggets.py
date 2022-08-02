@@ -28,8 +28,8 @@ class Buggets:
                 self._split_amount(row)
             used = row["amount"] - row["planned"]
             overspending = 0
-            free = row["limit"] - row["amount"]
-            needed = row["limit"] - used
+            free = row["limit"] + row['rollover_amount'] - row["amount"]
+            needed = row["limit"] + row['rollover_amount'] - used
             if free < 0:
                 overspending, free = free, overspending
             if needed < 0:
@@ -38,7 +38,7 @@ class Buggets:
             response.append(
                 {
                     "Name": row["name"],
-                    "Bugget (USD)": row["limit"],
+                    "Bugget (USD)": row["limit"] + row['rollover_amount'],
                     "Planned (USD)": row["planned"],
                     "Used (USD)": used,
                     "Free (USD)": free,
