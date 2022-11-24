@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  telegram-bot:
+    build:
+      context: .
+      dockerfile: ./docker/local/Dockerfile
+    image: toshl_manager
+    volumes:
+      - .:/app
+    env_file:
+      - ./.env
