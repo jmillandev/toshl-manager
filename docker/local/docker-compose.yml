@@ -3,10 +3,10 @@ version: '3'
 services:
   finance-manager:
     build:
-      context: ../../
+      context: .
       dockerfile: ./docker/local/Dockerfile
     image: toshl_manager
     volumes:
       - .:/app
     env_file:
-      - ../../.env
+      - .env

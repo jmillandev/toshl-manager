@@ -3,7 +3,7 @@ version: '3'
 services:
   finance-manager:
     build:
-      context: ../../
+      context: .
       dockerfile: ./docker/test/Dockerfile
     image: toshl_manager
     command: pytest

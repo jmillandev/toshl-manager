@@ -1,10 +1,26 @@
 #!/bin/sh
 
-while getopts 'e:' OPTION; do
+usage() {
+cat << EOF
+Application Entrypoint.
+
+Usage: ./init COMMAND-DOCKER-COMPOSE
+
+Options:
+  -e <enviroment> (test|local) : Current enviroment
+                                  (default: local)  
+EOF
+}
+
+while getopts 'he:' OPTION; do
   case "$OPTION" in
     e)
       enviroment="$OPTARG"
       echo "The value provided is $OPTARG"
+      ;;
+    h)
+      usage
+      exit 0
       ;;
   esac
 done
@@ -23,4 +39,4 @@ esac
 command=$(echo $@ | sed 's/-e\s\+\w\+\s*//')
 
 echo "Docker command: '$command'"
-docker compose -f ./docker/$enviroment/docker-compose.yml $command
+docker compose --project-directory ./ -f ./docker/$enviroment/docker-compose.yml $command
