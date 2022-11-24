@@ -5,5 +5,4 @@ services:
     build:
       context: .
       dockerfile: ./docker/test/Dockerfile
-    image: toshl_manager
-    command: pytest
+    image: toshl_manager_test

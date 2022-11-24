@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: ./docker/local/Dockerfile
-    image: toshl_manager
+    image: toshl_manager_local
     volumes:
       - .:/app
     env_file:
