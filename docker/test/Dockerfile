@@ -12,8 +12,6 @@ RUN apk update \
 RUN python -m pip install --upgrade pip
 
 COPY requirements requirements
-RUN python -m pip install -r requirements/local.txt
+RUN python -m pip install -r requirements/test.txt
 
 COPY . .
-
-CMD ["python", "application.py", "bot:telegram:start"]
