@@ -1,7 +1,8 @@
 on: [push]
 
 jobs:
-  build-and-push:
+  Deploy:
+    name: Run Test, Build Image and Deploy service
     runs-on: ubuntu-latest
     steps:
       -
@@ -9,8 +10,7 @@ jobs:
         uses: actions/checkout@v3
       -
         name: Run Test
-        run: |
-          ./init.sh -e test run --rm finance-manager
+        run: ./init.sh -e test run --rm finance-manager
       -
         name: Login to Docker Hub
         uses: docker/login-action@v2
@@ -27,4 +27,27 @@ jobs:
           context: .
           file: ./docker/prod/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/finance-manager:latest
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/finance-manager:latest,${{ secrets.DOCKER_HUB_USERNAME }}/finance-manager:{{ github.sha }}
+      - 
+        name: Install SSH Key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          known_hosts: 'just-a-placeholder-so-we-dont-get-errors'
+          name: id_rsa-server
+          config: |
+            Host finance-server
+              HostName ${{ secrets.SSH_HOST }}
+              User ${{ secrets.SSH_USER }}
+              IdentityFile ~/.ssh/id_rsa-server
+      - 
+        name: Adding Known Hosts
+        run: ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+      -
+        name: Pull Image
+        run: ssh finance-server "docker pull jgmc3012/finance-manager:latest"
+      - 
+        name: Restart service
+        run: |
+          ssh finance-server "docker rm -f finance-manager; docker run ${{ secrets.APP_SECRETS }} \
+            -d --name finance-manager jgmc3012/finance-manager:latest"
