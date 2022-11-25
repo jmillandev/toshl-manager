@@ -1,16 +1,17 @@
-on: [push]
+on:
+  push:
+    branches:
+      - 'master'
 
 jobs:
-  Deploy:
-    name: Run Test, Build Image and Deploy service
+  tests:
+    name: Run Tests
+    uses: ./.github/workflows/run-tests.yml
+  build-and-push:
+    name: Build and push docker image
+    needs: tests
     runs-on: ubuntu-latest
     steps:
-      -
-        name: Checkout
-        uses: actions/checkout@v3
-      -
-        name: Run Test
-        run: ./init.sh -e test run --rm finance-manager
       -
         name: Login to Docker Hub
         uses: docker/login-action@v2
@@ -21,6 +22,9 @@ jobs:
         name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
       -
+        name: Checkout
+        uses: actions/checkout@v3
+      -
         name: Build and push
         uses: docker/build-push-action@v3
         with:
@@ -28,25 +32,27 @@ jobs:
           file: ./docker/prod/Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/finance-manager:latest,${{ secrets.DOCKER_HUB_USERNAME }}/finance-manager:${{ github.sha }}
+  deploy:
+    name: Deploy service
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    steps:
       - 
         name: Install SSH Key
         uses: shimataro/ssh-key-action@v2
         with:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          known_hosts: 'just-a-placeholder-so-we-dont-get-errors'
+          known_hosts: ${{ secrets.SSH_KNOWN_HOSTS }}
           name: id_rsa-server
           config: |
             Host finance-server
               HostName ${{ secrets.SSH_HOST }}
               User ${{ secrets.SSH_USER }}
               IdentityFile ~/.ssh/id_rsa-server
-      - 
-        name: Adding Known Hosts
-        run: ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
       -
         name: Pull Image
         run: ssh finance-server "docker pull jgmc3012/finance-manager:latest"
-      - 
+      -
         name: Restart service
         run: |
           ssh finance-server "docker rm -f finance-manager; docker run ${{ secrets.APP_SECRETS }} \

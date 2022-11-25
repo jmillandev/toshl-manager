@@ -1,0 +1,9 @@
+on:
+  push:
+    branches:
+      - '!master'
+
+jobs:
+  tests:
+    name: Run Tests
+    uses: ./.github/workflows/run-tests.yml
