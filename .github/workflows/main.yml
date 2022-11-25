@@ -1,19 +1,16 @@
 on: [push]
 
 jobs:
-  run-test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Run Test
-        run: |
-          ./init.sh -e test run --rm finance-manager
   build-and-push:
     runs-on: ubuntu-latest
     steps:
       -
         name: Checkout
         uses: actions/checkout@v3
+      -
+        name: Run Test
+        run: |
+          ./init.sh -e test run --rm finance-manager
       -
         name: Login to Docker Hub
         uses: docker/login-action@v2
