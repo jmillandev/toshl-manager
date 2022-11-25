@@ -1,0 +1,5 @@
+version: '3'
+
+services:
+  finance-manager:
+    image: jgmc3012/finance-manager:latest
