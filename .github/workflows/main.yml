@@ -10,4 +10,4 @@ jobs:
 
       - name: Run Test
         run: |
-          ./init.sh -e test up --build
+          ./init.sh -e test run --rm finance-manager
