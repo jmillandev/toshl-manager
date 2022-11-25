@@ -9,8 +9,6 @@ ARG USERNAME=developer
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 
-WORKDIR /app
-
 RUN \
     # Create the user
     addgroup --gid $USER_GID $USERNAME \
@@ -24,11 +22,13 @@ RUN \
     && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
     && chmod 0440 /etc/sudoers.d/$USERNAME
 
+# Install python packages
 COPY requirements requirements
 RUN python -m pip install -r requirements/local.txt
 
-COPY . .
-
+# Copy app folder
 USER $USERNAME
+WORKDIR /app
+COPY --chown=$USERNAME:$USERNAME . .
 
 CMD ["python", "application.py", "bot:telegram:start"]
