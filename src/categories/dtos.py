@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-from core.type_of_entry import TypeOfEntry
+from core.shared.type_of_entry import TypeOfEntry
 
 
 class CategoryDto(BaseModel):

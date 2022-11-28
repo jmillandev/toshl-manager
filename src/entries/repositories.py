@@ -2,7 +2,7 @@ from datetime import date
 
 from pydantic import BaseModel, Field
 
-from core.type_of_entry import TypeOfEntry
+from core.shared.type_of_entry import TypeOfEntry
 
 from .dtos import EntryDto
 
