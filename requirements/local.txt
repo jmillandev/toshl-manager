@@ -1,1 +1,4 @@
 -r ./test.txt
+
+# Shell Helpers
+ipython==8.6.0
