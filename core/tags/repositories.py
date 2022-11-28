@@ -4,6 +4,5 @@ from .dtos import TagDto
 
 class TagRepositoryInterface:
 
-    # TODO: Define params type values
-    async def list(self, **params) -> list[TagDto]:
+    async def list(self, ids: list[int]) -> list[TagDto]:
         raise NotImplementedError

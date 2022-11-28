@@ -3,6 +3,5 @@ from .dtos import CategoryDto
 
 class CategoryRepositoryInterface:
 
-    # TODO: Define params type values
-    async def list(self, **params)-> list[CategoryDto]:
+    async def list(self, ids: list[int])-> list[CategoryDto]:
         raise NotImplementedError
