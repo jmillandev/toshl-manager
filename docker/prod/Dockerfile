@@ -16,7 +16,9 @@ RUN \
     # Upgrade system
     && apk update \
     && apk upgrade \
-    && python -m pip install --upgrade pip
+    && python -m pip install --upgrade pip \
+    # Required by dependency_injector
+    && apk add --no-cache gcc musl-dev
 
 # Install python packages
 COPY requirements requirements

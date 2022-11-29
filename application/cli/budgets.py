@@ -4,7 +4,7 @@ from cleo import Command
 
 from libs.formatters import FORMATERS
 from libs.outputs import OUTPUTS
-from src.entries.controllers.budgets import BudgetController
+from src.budgets.services.summary_list import BudgetSumaryListService 
 
 
 class ListBugets(Command):
@@ -24,5 +24,5 @@ class ListBugets(Command):
         formater = FORMATERS[self.option("formatter").lower()]
         output = OUTPUTS[self.option("output").lower()]
 
-        entries = asyncio.run(BudgetController().list(date_from, date_to))
+        entries = asyncio.run(BudgetSumaryListService().execute(date_from, date_to))
         output.out(formater().format(entries), "Buggets")

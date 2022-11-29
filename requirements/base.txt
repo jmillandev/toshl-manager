@@ -16,3 +16,6 @@ Pillow==9.2.0
 
 # DTOs
 pydantic==1.10.2
+
+# Dependency Injector Pattern
+dependency_injector==4.40.0

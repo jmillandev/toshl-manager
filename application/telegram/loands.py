@@ -14,7 +14,7 @@ class CleanLoans(SubscriberIogramInterface):
     """
     Remove unpayment tag from the loan entries. And show the entries modificated
     """
-    REGEX_PATTERN = r"(\s+from\s+(?P<date_from>\d{1,2}\/\d{1,2}\/\d{1,2}))?(\s+to\s+(?P<date_to>\d{1,2}\/\d{1,2}\/\d{1,2}))?"
+    REGEX_PATTERN = r"(\s+from\s+(?P<from_date>\d{1,2}\/\d{1,2}\/\d{1,2}))?(\s+to\s+(?P<to_date>\d{1,2}\/\d{1,2}\/\d{1,2}))?"
 
     async def handler(self, event: types.Message)-> None:
         kwargs = parse_regex(event.text, self.REGEX_PATTERN)
@@ -35,7 +35,7 @@ class ListLoans(SubscriberIogramInterface):
     """
     List the loans in the specific format
     """
-    REGEX_PATTERN = r"(\s+from\s+(?P<date_from>\d{1,2}\/\d{1,2}\/\d{1,2}))?(\s+to\s+(?P<date_to>\d{1,2}\/\d{1,2}\/\d{1,2}))?"
+    REGEX_PATTERN = r"(\s+from\s+(?P<from_date>\d{1,2}\/\d{1,2}\/\d{1,2}))?(\s+to\s+(?P<to_date>\d{1,2}\/\d{1,2}\/\d{1,2}))?"
 
     async def handler(self, event: types.Message)-> None:
         kwargs = parse_regex(event.text, self.REGEX_PATTERN)

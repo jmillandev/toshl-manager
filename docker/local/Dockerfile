@@ -16,6 +16,8 @@ RUN \
     # Upgrade system
     && apk update \
     && apk upgrade \
+    # Required by dependency_injector
+    && apk add --no-cache gcc musl-dev\
     && python -m pip install --upgrade pip \
     # Add sudo support(Maybe we need to install software after connecting).
     && apk add sudo \
