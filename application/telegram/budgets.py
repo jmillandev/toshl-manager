@@ -31,7 +31,7 @@ class ListBugets(SubscriberIogramInterface):
         total = TotalDictCalculator(data)
         message = TableFormat().format(data.append(total))
 
-        return await event.answer_photo(TextToImageConverter.execute(message))
+        await event.answer_photo(TextToImageConverter.execute(message))
 
     def command(self) -> str:
         return 'buggets:list'

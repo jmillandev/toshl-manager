@@ -1,8 +1,8 @@
-from ..serializers import BudgetSerializer
-
-from src.budgets.value_objects import Budget, BudgetFrequency
 from datetime import date
 from unittest.mock import patch
+
+from src.budgets.serializers import BudgetSerializer
+from src.budgets.value_objects import Budget, BudgetFrequency
 
 
 @patch('src.budgets.value_objects.BUGGETS_SHARED', {"123"})
@@ -21,17 +21,18 @@ def test_roomie_budget():
         rollover=True,
         rollover_amount=10,
         frequency=BudgetFrequency.MONTHLY,
-        categories=[1,2,3]
+        categories=[1, 2, 3]
     )
     assert BudgetSerializer().json(budget) == {
-            "Name": budget.name,
-            "Bugget (USD)": budget.roomie_limit,
-            "Planned (USD)": budget.roomie_planned,
-            "Used (USD)": budget.roomie_used,
-            "Available (USD)": budget.roomie_available,
-            "Shared with rommie": "Yes",
-            "ID": budget.id
-        }
+        "Name": budget.name,
+        "Bugget (USD)": budget.roomie_limit,
+        "Planned (USD)": budget.roomie_planned,
+        "Used (USD)": budget.roomie_used,
+        "Available (USD)": budget.roomie_available,
+        "Shared with rommie": "Yes",
+        "ID": budget.id
+    }
+
 
 def test_budget_without_roomie():
     budget = Budget(
@@ -48,14 +49,14 @@ def test_budget_without_roomie():
         rollover=True,
         rollover_amount=10,
         frequency=BudgetFrequency.MONTHLY,
-        categories=[1,2,3]
+        categories=[1, 2, 3]
     )
     assert BudgetSerializer().json(budget) == {
-            "Name": budget.name,
-            "Bugget (USD)": budget.roomie_limit,
-            "Planned (USD)": budget.roomie_planned,
-            "Used (USD)": budget.roomie_used,
-            "Available (USD)": budget.roomie_available,
-            "Shared with rommie": "No",
-            "ID": budget.id
-        }
+        "Name": budget.name,
+        "Bugget (USD)": budget.roomie_limit,
+        "Planned (USD)": budget.roomie_planned,
+        "Used (USD)": budget.roomie_used,
+        "Available (USD)": budget.roomie_available,
+        "Shared with rommie": "No",
+        "ID": budget.id
+    }

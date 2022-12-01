@@ -1,8 +1,8 @@
 from unittest import TestCase
 
 from src.budgets.services.summary_list import BudgetListService
-from src.budgets.tests.factories import BudgetFactory
-from src.budgets.tests.mocks.repository import BudgetMockRepository
+from tests.src.budgets.factories import BudgetFactory
+from tests.src.budgets.mocks.repository import BudgetMockRepository
 
 
 class TestSumaryList(TestCase):
