@@ -39,11 +39,6 @@ class Budget(BaseModel):
         return self.limit + self.rollover_amount - self.amount
 
     @property
-    def needed(self)-> float:
-        needed = self.limit + self.rollover_amount - self.used
-        return 0 if needed < 0 else needed
-
-    @property
     def roomie_limit(self):
         return self._split_shared_with_roomie(self.limit)
 
@@ -58,10 +53,6 @@ class Budget(BaseModel):
     @property
     def roomie_available(self):
         return self._split_shared_with_roomie(self.available)
-
-    @property
-    def roomie_needed(self):
-        return self._split_shared_with_roomie(self.needed)
 
     def _split_shared_with_roomie(self, number):
         return (number / 2) if self.shared_with_roomie else number

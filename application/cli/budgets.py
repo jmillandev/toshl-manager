@@ -2,9 +2,11 @@ import asyncio
 
 from cleo import Command
 
+from libs.calculators.total_dict import TotalDictCalculator
 from libs.formatters import FORMATERS
 from libs.outputs import OUTPUTS
-from src.budgets.services.summary_list import BudgetSumaryListService 
+from src.budgets.serializers import BudgetSerializer
+from src.budgets.services.summary_list import BudgetListService
 
 
 class ListBugets(Command):
@@ -23,6 +25,10 @@ class ListBugets(Command):
         date_to = self.option("to")
         formater = FORMATERS[self.option("formatter").lower()]
         output = OUTPUTS[self.option("output").lower()]
+        serializer = BudgetSerializer()
 
-        entries = asyncio.run(BudgetSumaryListService().execute(date_from, date_to))
-        output.out(formater().format(entries), "Buggets")
+        budgets = asyncio.run(BudgetListService().execute(date_from, date_to))
+        data = [serializer.json(budget) for budget in budgets]
+        total = TotalDictCalculator(data)
+
+        output.out(formater().format(data.append(total)), "Buggets")

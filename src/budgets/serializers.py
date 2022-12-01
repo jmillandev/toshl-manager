@@ -9,7 +9,6 @@ class BudgetSerializer:
             "Planned (USD)": budget.roomie_planned,
             "Used (USD)": budget.roomie_used,
             "Available (USD)": budget.roomie_available,
-            "Needed (USD)": budget.roomie_needed,
             "Shared with rommie": 'Yes' if budget.shared_with_roomie else 'No',
             "ID": budget.id
         }

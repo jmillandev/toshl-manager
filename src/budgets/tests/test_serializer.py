@@ -29,7 +29,6 @@ def test_roomie_budget():
             "Planned (USD)": budget.roomie_planned,
             "Used (USD)": budget.roomie_used,
             "Available (USD)": budget.roomie_available,
-            "Needed (USD)": budget.roomie_needed,
             "Shared with rommie": "Yes",
             "ID": budget.id
         }
@@ -57,7 +56,6 @@ def test_budget_without_roomie():
             "Planned (USD)": budget.roomie_planned,
             "Used (USD)": budget.roomie_used,
             "Available (USD)": budget.roomie_available,
-            "Needed (USD)": budget.roomie_needed,
             "Shared with rommie": "No",
             "ID": budget.id
         }
