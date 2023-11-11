@@ -1,4 +1,4 @@
-from asyncio import Semaphore, events, gather
+from asyncio import Semaphore, gather
 from copy import deepcopy
 from re import L
 
@@ -50,5 +50,5 @@ class CleanUnpaymentEntriesController:
     @property
     def _sem(self):
         if not self.__sem:
-            self.__sem = Semaphore(PARALLEL_REQUEST, loop=events.get_event_loop())
+            self.__sem = Semaphore(PARALLEL_REQUEST)
         return self.__sem
