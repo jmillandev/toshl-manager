@@ -8,9 +8,9 @@ class RoomieExpensesCleaner:
             amount = abs(row["amount"])
             response.append(
                 {
-                    "Description": row["desc"].replace('\n', ' - '),
+                    "Description": row["desc"].replace("\n", " - "),
                     "USD Amount": str(amount),
-                    "Category":  cls._format_category(row),
+                    "Category": cls._format_category(row),
                     "Tags": cls._format_tags(row),
                     "Date": row["date"],
                     "ID": row["id"],
@@ -20,8 +20,8 @@ class RoomieExpensesCleaner:
 
         response.append(
             {
-                "Description": "TOTAL / 2",
-                "USD Amount": f"{sum/2:.3f}",
+                "Description": "TOTAL * 30.62%",
+                "USD Amount": f"{sum * 0.3062 :.3f}",
                 "Category": "---",
                 "Tags": "---",
                 "Date": "---",
@@ -35,7 +35,7 @@ class RoomieExpensesCleaner:
         categories = row["included"].get("category")
         if not categories:
             return row["category"]
-        
+
         return categories[row["category"]]["name"]
 
     @classmethod
