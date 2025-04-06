@@ -20,8 +20,8 @@ class RoomieExpensesCleaner:
 
         response.append(
             {
-                "Description": "TOTAL * 30.62%",
-                "USD Amount": f"{sum * 0.3062 :.3f}",
+                "Description": "TOTAL * 42.37%",
+                "USD Amount": f"{sum * 0.4237 :.3f}",
                 "Category": "---",
                 "Tags": "---",
                 "Date": "---",
